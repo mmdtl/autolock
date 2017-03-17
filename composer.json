@@ -1,0 +1,27 @@
+{
+  "name": "mmdtl/autolock",
+  "description": "Redis distributed locks in PHP",
+  "authors": [
+    {
+      "name": "liulu",
+      "email": "liulu.0610@gamil.com"
+    }
+  ],
+  "require": {
+    "php": "^5.3|^7.0",
+    "ext-redis": "~2.2.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "AutoLock\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AutoLock\\Test\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "6.0"
+  }
+}
