@@ -1,5 +1,6 @@
 <?php
 use AutoLock\Lock;
+use AutoLock\Server;
 
 /**
  * Created by PhpStorm.
@@ -106,7 +107,7 @@ class Manager
         $onLineServersNumber = 0;
         foreach ($this->pool as $server) {
             /**
-             * @var $server \AutoLock\Server
+             * @var $server Server
              */
             if ($server->available()) {
                 $onLineServersNumber++;
