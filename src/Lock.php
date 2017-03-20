@@ -10,9 +10,14 @@
  */
 namespace AutoLock;
 
-use \Redis;
-use \RedisException;
-
+/**
+ * Class Lock contain info of lock. It has attribute like max lifetime of the lock,
+ * lock's manager , key  of the lock and value of the lock
+ *
+ * @package AutoLock
+ * @author Liu Lu <liulu.0610@gmail.com>
+ * @since 0.1
+ */
 class Lock
 {
     /**

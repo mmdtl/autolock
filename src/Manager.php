@@ -3,10 +3,12 @@ use AutoLock\Lock;
 use AutoLock\Server;
 
 /**
- * Created by PhpStorm.
- * User: liulu
- * Date: 2017/3/16
- * Time: 16:30
+ * Class Manager is using to create lock and release lock
+ * using pool.
+ *
+ * @package AutoLock
+ * @author Liu Lu <liulu.0610@gmail.com>
+ * @since 0.1
  */
 class Manager
 {

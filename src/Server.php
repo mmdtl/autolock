@@ -14,6 +14,13 @@ use autolock\src\Exception\InvalidConfigException;
 use autolock\src\Exception\ServerConnectException;
 use autolock\src\Exception\ServersOperateException;
 
+/**
+ * Class Server is object to connect to redis server , create and release lock.
+ *
+ * @package AutoLock
+ * @author Liu Lu <liulu.0610@gmail.com>
+ * @since 0.1
+ */
 class Server
 {
     /**

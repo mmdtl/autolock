@@ -9,9 +9,15 @@
  */
 namespace AutoLock;
 
-use Iterator;
+/**
+ * Class Pool is using to collect servers.
+ *
+ * @package AutoLock
+ * @author Liu Lu <liulu.0610@gmail.com>
+ * @since 0.1
+ */
 
-class Pool implements Iterator
+class Pool implements \Iterator
 {
     /**
      * @servers array Server
