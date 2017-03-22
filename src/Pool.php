@@ -9,6 +9,8 @@
  */
 namespace AutoLock;
 
+use autolock\Drivers\Driver;
+
 /**
  * Class Pool is using to collect servers.
  *
@@ -24,22 +26,38 @@ class Pool implements \Iterator
      */
     private $servers;
 
-    private $configObjects;
+    /**
+     * @var int
+     */
+    private $quorum;
 
 
-    public function __construct($serversConfig)
+    /**
+     * Pool constructor.
+     * @param $serversConfig
+     * @param Driver $driver
+     */
+    public function __construct($serversConfig, Driver $driver)
     {
         foreach ($serversConfig as $configDsn) {
-            $this->servers[] = $this->initServer($configDsn);
+            $this->servers[] = $this->getServer($this->getConfig($configDsn), $driver);
         }
+        $this->quorum = $this->getQuorum();
     }
 
-    protected function initServer($configDsn)
+    public function getQuorum()
     {
-        $config = new Config($configDsn);
-        $this->configObjects[] = $config;
-        return new Server($config);
+        return min(count($this->servers), (floor(count($this->servers) / 2) + 1));
+    }
 
+    protected function getConfig($dsn)
+    {
+        return new Config($dsn);
+    }
+
+    protected function getServer(Config $config, Driver $driver)
+    {
+        return new Server($config, $driver);
     }
 
     public function checkQuorum($n)
@@ -54,20 +72,18 @@ class Pool implements \Iterator
 
     public function current()
     {
-        $servers = current($this->servers);
-        return $servers;
+        return current($this->servers);
+
     }
 
     public function key()
     {
-        $servers = key($this->servers);
-        return $servers;
+        return key($this->servers);
     }
 
     public function next()
     {
-        $servers = next($this->servers);
-        return $servers;
+        next($this->servers);
     }
 
     public function valid()

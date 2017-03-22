@@ -1,5 +1,7 @@
 <?php
+use AutoLock\Drivers\PHPRedis;
 use AutoLock\Lock;
+use AutoLock\Pool;
 use AutoLock\Server;
 
 /**
@@ -28,14 +30,14 @@ class Manager
      */
     private $clockDriftFactor = 0.01;
     /**
-     * @var \AutoLock\Pool
+     * @var Pool
      */
     private $pool;
 
 
     function __construct(array $serversConfig, $retryDelay = 200, $retryCount = 0)
     {
-        $this->pool = new Pool($serversConfig);
+        $this->pool = new Pool($serversConfig, new PHPRedis());
         $this->retryDelay = $retryDelay;
         $this->retryCount = $retryCount;
     }

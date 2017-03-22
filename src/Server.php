@@ -49,6 +49,22 @@ class Server
     }
 
     /**
+     * @return Config
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @return Driver
+     */
+    public function getDriver()
+    {
+        return $this->driver;
+    }
+
+    /**
      * @throws ServerConnectException
      * @throws ServersOperateException
      */

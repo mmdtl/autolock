@@ -68,6 +68,15 @@ class ServerTest extends TestCase
         new Server(new stdClass(), $this->driver->reveal());
     }
 
+    public function testGet()
+    {
+        $config = $this->config->reveal();
+        $driver = $this->driver->reveal();
+        $server = new Server($config, $driver);
+        $this->assertEquals($config, $server->getConfig());
+        $this->assertEquals($driver, $server->getDriver());
+    }
+
     /**
      * @expectedException Error
      */
