@@ -6,11 +6,12 @@
  * Time: 11:17
  */
 
-namespace autolock\src;
+namespace autolock\Drivers;
 
 
 interface Driver
 {
+    const PONG_STRING = '+PONG';
     /**
      * @param string $host
      * @param int $port
@@ -33,7 +34,7 @@ interface Driver
      * @param int $numKeys
      * @return mixed
      */
-    public function eval($script, $args = array(), $numKeys = 0);
+    public function evalScript($script, $args = array(), $numKeys = 0);
 
     /**
      * @return bool

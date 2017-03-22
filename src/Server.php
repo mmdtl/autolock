@@ -9,10 +9,9 @@
  */
 namespace AutoLock;
 
-use autolock\src\Driver;
-use autolock\src\Exception\InvalidConfigException;
-use autolock\src\Exception\ServerConnectException;
-use autolock\src\Exception\ServersOperateException;
+use autolock\Drivers\Driver;
+use AutoLock\Exception\ServerConnectException;
+use AutoLock\Exception\ServersOperateException;
 
 /**
  * Class Server is object to connect to redis server , create and release lock.
@@ -33,28 +32,31 @@ class Server
      */
     private $instance;
 
-    protected $driverMap = array(
-        'phpredis' => '/redis'
-    );
+    /**
+     * @var Driver
+     */
+    protected $driver;
 
-    protected $driverName;
-
-    public function __construct(Config $config, $driverName = 'phpredis')
+    /**
+     * Server constructor.
+     * @param Config $config
+     * @param Driver $driver
+     */
+    public function __construct(Config $config, Driver $driver)
     {
         $this->config = $config;
-        $this->driverName = $driverName;
-        $this->open();
+        $this->driver = $driver;
     }
 
-    public function open()
+    /**
+     * @throws ServerConnectException
+     * @throws ServersOperateException
+     */
+    protected function open()
     {
         if (empty($this->instance)) {
-            $config = $this->getConfig();
-            $driverClass = $this->getDriver();
-            /**
-             * @var $driver Driver
-             */
-            $driver = new $driverClass();
+            $config = $this->config;
+            $driver = $this->driver;
             $status = $driver->connect($config->getHost(), $config->getPort(), $config->getTimeout());
             if ($status !== true) {
                 throw new ServerConnectException('server connect fail.');
@@ -65,47 +67,54 @@ class Server
             if ($status !== true) {
                 throw new ServersOperateException("server set option $optionName:$prefix fail.");
             }
+            $this->instance = $driver;
         }
     }
 
-    protected function getDriver()
-    {
-        if (empty($this->driverMap[$this->driverName])) {
-            throw new InvalidConfigException('server driver name can\'t be found.');
-        } else {
-            return $this->driverMap[$this->driverName];
-        }
-    }
-
-    protected function getConfig()
-    {
-        if (empty($this->config)) {
-            throw new InvalidConfigException('server config should not be empty.');
-        } else {
-            return $this->config;
-        }
-    }
-
+    /**
+     * @param $key
+     * @param $value
+     * @param array $Options
+     * @return Bool
+     */
     public function set($key, $value, $Options = array())
     {
-        $this->open();
-        return $this->instance->set($key, $value, $Options);
+        return $this->getInstance()->set($key, $value, $Options);
     }
 
-    public function eval($script, $args = array(), $numKeys = 0)
+    /**
+     * @param $script
+     * @param array $args
+     * @param int $numKeys
+     * @return mixed
+     */
+    public function evalScript($script, $args = array(), $numKeys = 0)
     {
-        $this->open();
-        return $this->instance->eval($script, $args, $numKeys);
+        return $this->getInstance()->evalScript($script, $args, $numKeys);
     }
 
+    /**
+     * @return bool
+     */
     public function available()
     {
         $status = false;
-        $successPingString = '+PONG';
-        $responseString = $this->instance->ping();
+        $successPingString = Driver::PONG_STRING;
+        $responseString = $this->getInstance()->ping();
         if ($responseString === $successPingString) {
             $status = true;
         }
         return $status;
+    }
+
+    /**
+     * @return Driver
+     * @throws ServerConnectException
+     * @throws ServersOperateException
+     */
+    public function getInstance()
+    {
+        $this->open();
+        return $this->instance;
     }
 }

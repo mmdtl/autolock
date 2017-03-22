@@ -1,11 +1,10 @@
 <?php
-namespace autolock\src\Exception;
+namespace AutoLock\Exception;
 
-use \Exception;
 
 /**
  * Exception when can't connect with server
  */
-class ServersEmptyException extends ServersBaseException
+class ServerConnectException extends ServersBaseException
 {
 }

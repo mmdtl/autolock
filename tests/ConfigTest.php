@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: liulu
- * Date: 2017/3/13
- * Time: 18:13
- */
-
 namespace AutoLock\tests;
 
 

@@ -1,5 +1,5 @@
 <?php
-namespace autolock\src\Exception;
+namespace AutoLock\Exception;
 
 use \Exception;
 

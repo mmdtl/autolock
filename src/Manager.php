@@ -101,7 +101,7 @@ class Manager
                 return 0
             end
         ';
-        return $server->eval($script, array($resource, $token), 1);
+        return $server->evalScript($script, array($resource, $token), 1);
     }
 
     public function available()
