@@ -7,7 +7,6 @@ use autolock\Drivers\Driver;
 use AutoLock\Drivers\PHPRedis;
 use AutoLock\Pool;
 use AutoLock\Server;
-use Iterator;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophet;
 
@@ -67,15 +66,6 @@ class PoolTest extends TestCase
         $this->assertInstanceOf(Pool::class, $pool);
     }
 
-    public function testGetQuorum()
-    {
-        $pool = new Pool($this->serversConfig, $this->driverObject);
-        $this->assertEquals(2, $pool->getQuorum());
-        $pool = new Pool($this->serverConfig, $this->driverObject);
-        $this->assertEquals(1, $pool->getQuorum());
-    }
-
-
     /**
      * @dataProvider quorumMultiServersProvider
      */
@@ -125,27 +115,5 @@ class PoolTest extends TestCase
              */
             $this->assertEquals($configObject, $server->getConfig());
         }
-
-//        $iteratorMock = $this->getMockBuilder(Pool::class)->disableOriginalConstructor()->setMethods(array('rewind', 'valid', 'current', 'key', 'next'))->getMockForAbstractClass();
-//        $this->mockIteratorItems($iteratorMock, array('foo', 'bar', 'bar'));
     }
-
-    /**
-     * Adds expected items to a mocked Iterator.
-     */
-    function mockIteratorItems(Iterator $iterator, array $items, $includeCallsToKey = false)
-    {
-        $iterator->expects($this->at(0))->method('rewind');
-        $counter = 1;
-        foreach ($items as $k => $v) {
-            $iterator->expects($this->at($counter++))->method('valid')->will($this->returnValue(true));
-            $iterator->expects($this->at($counter++))->method('current')->will($this->returnValue($v));
-            if ($includeCallsToKey) {
-                $iterator->expects($this->at($counter++))->method('key')->will($this->returnValue($k));
-            }
-            $iterator->expects($this->at($counter++))->method('next');
-        }
-        $iterator->expects($this->at($counter))->method('valid')->will($this->returnValue(false));
-    }
-
 }

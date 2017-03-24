@@ -39,7 +39,7 @@ class PHPRedis implements Driver
 
     public function evalScript($script, $args = array(), $numKeys = 0)
     {
-        return $this->redis->evalScript($script, $args, $numKeys);
+        return $this->redis->eval($script, $args, $numKeys);
     }
 
     public function ping()

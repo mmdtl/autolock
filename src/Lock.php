@@ -21,9 +21,14 @@ namespace AutoLock;
 class Lock
 {
     /**
-     * @var float
+     * @var int
      */
     private $validity;
+
+    /**
+     * @var float
+     */
+    private $createTime;
 
     /**
      * @var string
@@ -36,7 +41,7 @@ class Lock
     private $token;
 
     /**
-     * @var \Manager
+     * @var Manager
      */
     private $manager;
 
@@ -45,13 +50,14 @@ class Lock
      */
     private $autoRelease;
 
-    public function __construct($manager, $validity, $resource, $token, $autoRelease = false)
+    public function __construct(Manager $manager, $validity, $resource, $token, $autoRelease = false)
     {
-        $this->validity = $validity;
-        $this->resource = $resource;
-        $this->token = $token;
+        $this->validity = (int)$validity;
+        $this->resource = (string)$resource;
+        $this->token = (string)$token;
         $this->manager = $manager;
-        $this->autoRelease = $autoRelease;
+        $this->autoRelease = (bool)$autoRelease;
+        $this->createTime = microtime(true) * 1000;
     }
 
     /**
@@ -64,7 +70,9 @@ class Lock
 
     public function __destruct()
     {
-        return $this->release();
+        if ($this->autoRelease === true) {
+            return $this->release();
+        }
     }
 
     /**
@@ -92,13 +100,37 @@ class Lock
     }
 
     /**
-     * @return \Manager
+     * @return Manager
      */
     public function getManager()
     {
         return $this->manager;
     }
 
+    /**
+     * @return bool
+     */
+    public function getAutoRelease()
+    {
+        return $this->autoRelease;
+    }
 
+    /**
+     * @param bool|float $time
+     * @return bool
+     */
+    public function isExpired($time = false)
+    {
+        if ($time === false) {
+            $time = microtime(true) * 1000;
+        } else {
+            $time += microtime(true) * 1000;
+        }
+        if ($time > $this->createTime + $this->validity) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
 

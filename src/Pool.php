@@ -22,7 +22,7 @@ use autolock\Drivers\Driver;
 class Pool implements \Iterator
 {
     /**
-     * @servers array Server
+     * @var array Server
      */
     private $servers;
 
@@ -42,13 +42,9 @@ class Pool implements \Iterator
         foreach ($serversConfig as $configDsn) {
             $this->servers[] = $this->getServer($this->getConfig($configDsn), $driver);
         }
-        $this->quorum = $this->getQuorum();
+        $this->quorum = (int)min(count($this->servers), (floor(count($this->servers) / 2) + 1));
     }
 
-    public function getQuorum()
-    {
-        return min(count($this->servers), (floor(count($this->servers) / 2) + 1));
-    }
 
     protected function getConfig($dsn)
     {
@@ -73,7 +69,6 @@ class Pool implements \Iterator
     public function current()
     {
         return current($this->servers);
-
     }
 
     public function key()
