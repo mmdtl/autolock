@@ -100,7 +100,7 @@ class LockTest extends TestCase
         return array(
             array(1000, false, true),
             array(1000, 0, true),
-            array(1000, 1000, true),
+            array(1000, 999, true),
             array(1000, 1001, false),
             array(1000, 2000, false),
         );

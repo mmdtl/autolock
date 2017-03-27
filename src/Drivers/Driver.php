@@ -1,9 +1,11 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: liulu
- * Date: 2017/3/14
- * Time: 11:17
+ * This file is part of mmdtl/autolock.
+ *
+ * (c) liulu <liulu.0610@gmail.com>
+ *
+ * For the full copyright and license information, please view the "LICENSE.md"
+ * file that was distributed with this source code.
  */
 
 namespace autolock\Drivers;

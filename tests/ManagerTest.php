@@ -2,17 +2,11 @@
 namespace AutoLock\tests;
 
 
-use AutoLock\Config;
-use autolock\Drivers\Driver;
-use AutoLock\Drivers\PHPRedis;
 use AutoLock\Manager;
 use AutoLock\Pool;
 use AutoLock\Server;
-use Iterator;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Prophecy\Call\Call;
-use Prophecy\Promise\ReturnPromise;
 use Prophecy\Prophet;
 use AutoLock\Lock;
 
@@ -166,7 +160,7 @@ class ManagerTest extends TestCase
         return array(
             array('test0', 0, false),
             array('test1', Manager::MIN_DRIFT, false),
-            array('test2', Manager::MIN_DRIFT * 5, false),
+            array('test2', Manager::MIN_DRIFT * 25, false),
             array('test3', 1000, false),
             array('test4', 3600 * 1000, false),
         );
@@ -208,22 +202,15 @@ class ManagerTest extends TestCase
     }
 
     /**
-     * Adds expected items to a mocked Iterator.
+     * @expectedException \AutoLock\Exception\ManagerCompareException
      */
-    public function mockIteratorItems($iterator, array $items, $includeCallsToKey = false)
+    public function testUnlockError()
     {
-
-        $iterator->expects($this->at(0))->method('rewind');
-        $counter = 1;
-        foreach ($items as $k => $v) {
-            $iterator->expects($this->at($counter++))->method('valid')->will($this->returnValue(true));
-            $iterator->expects($this->at($counter++))->method('current')->will($this->returnValue($v));
-            if ($includeCallsToKey) {
-                $iterator->expects($this->at($counter++))->method('key')->will($this->returnValue($k));
-            }
-            $iterator->expects($this->at($counter++))->method('next');
-        }
-        $iterator->expects($this->at($counter))->method('valid')->will($this->returnValue(false));
+        $lock = $this->prophet->prophesize(Lock::class);
+        $pool = $this->prophet->prophesize(Pool::class);
+        $manager = new Manager($pool->reveal());
+        $lock->getManager()->willReturn(new Manager($pool->reveal()))->shouldBeCalledTimes(1);
+        $manager->unlock($lock->reveal());
     }
 
     /**

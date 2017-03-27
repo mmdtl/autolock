@@ -1,6 +1,6 @@
-redlock-php - Redis distributed locks in PHP
+AutoLock - Redis distributed locks in PHP
 
-Based on [Redlock-rb](https://github.com/antirez/redlock-rb) by [Salvatore Sanfilippo](https://github.com/antirez)
+This library implements the RedLock algorithm introduced by [@antirez](http://antirez.com/)
 
 This library implements the Redis-based distributed lock manager algorithm [described in this blog post](http://antirez.com/news/77).
 
@@ -8,13 +8,13 @@ To create a lock manager:
 
 ```php
 
-$servers = [
-    ['127.0.0.1', 6379, 0.01],
-    ['127.0.0.1', 6389, 0.01],
-    ['127.0.0.1', 6399, 0.01],
-];
+$pool = new \AutoLock\Pool(array(
+    '192.168.1.1:6379',
+    '192.168.1.2:6379',
+    '192.168.1.3:6379',
+),new \AutoLock\Drivers\PHPRedis());
 
-$redLock = new RedLock($servers);
+$manager = new \AutoLock\Manager($pool);
 
 ```
 
@@ -22,7 +22,7 @@ To acquire a lock:
 
 ```php
 
-$lock = $redLock->lock('my_resource_name', 1000);
+$lock = $manager->lock('distributed_lock',1000);;
 
 ```
 
@@ -30,16 +30,20 @@ Where the resource name is an unique identifier of what you are trying to lock
 and 1000 is the number of milliseconds for the validity time.
 
 The returned value is `false` if the lock was not acquired (you may try again),
-otherwise an array representing the lock is returned, having three keys:
+otherwise an object representing the lock is returned, you should use isExpired method
+to detect whether the lock is expired now or in certain time:
 
 ```php
-Array
-(
-    [validity] => 9897.3020019531
-    [resource] => my_resource_name
-    [token] => 53771bfa1e775
-)
+
+$status = $lock->isExpired();
+//$status will be true if the lock is expired or it will be false
+$status = $lock->isExpired(3600 * 1000);
+//$status will be true if the lock will be expired after 3600 seconds or it will be false
+
 ```
+
+
+
 
 * validity, an integer representing the number of milliseconds the lock will be valid.
 * resource, the name of the locked resource as specified by the user.
@@ -48,7 +52,7 @@ Array
 To release a lock:
 
 ```php
-    $redLock->unlock($lock)
+    $lock->unlock($lock)
 ```
 
 It is possible to setup the number of retries (by default 3) and the retry

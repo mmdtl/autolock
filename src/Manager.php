@@ -43,7 +43,7 @@ class Manager
     private $pool;
 
 
-    function __construct(Pool $pool, $retryDelay = 200, $retryCount = 0)
+    function __construct(Pool $pool, $retryDelay = 200, $retryCount = 3)
     {
         $this->pool = $pool;
         $this->retryDelay = $retryDelay;
@@ -101,6 +101,7 @@ class Manager
 
     /**
      * @param Lock $lock
+     * @throws ManagerCompareException
      */
     public function unlock(Lock $lock)
     {
