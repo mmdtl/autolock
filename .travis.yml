@@ -12,8 +12,7 @@ php:
   - hhvm
 
 before_script:
-  - curl --version
-  - composer install --no-interaction --prefer-source --dev
+  - composer install --dev
   - cd tests
 
 script: phpunit -v
