@@ -16,7 +16,7 @@
   ],
   "require": {
     "php": "^5.3|^7.0",
-    "ext-redis": "~2.2.5"
+    "ext-redis": "^2.2.5"
   },
   "autoload": {
     "psr-4": {
