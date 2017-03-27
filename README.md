@@ -61,6 +61,3 @@ delay (by default 200 milliseconds) used to acquire the lock.
 The retry delay is actually chosen at random between `$retryDelay / 2` milliseconds and
 the specified `$retryDelay` value.
 
-**Disclaimer**: As stated in the original antirez's version, this code implements an algorithm
-which is currently a proposal, it was not formally analyzed. Make sure to understand how it works
-before using it in your production environments.

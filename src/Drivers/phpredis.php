@@ -2,10 +2,12 @@
 namespace AutoLock\Drivers;
 
 /**
- * Created by PhpStorm.
- * User: liulu
- * Date: 2017/3/20
- * Time: 19:40
+ * This file is part of mmdtl/autolock.
+ *
+ * (c) liulu <liulu.0610@gmail.com>
+ *
+ * For the full copyright and license information, please view the "LICENSE.md"
+ * file that was distributed with this source code.
  */
 use \Redis;
 use RedisException;
@@ -42,6 +44,10 @@ class PHPRedis implements Driver
         return $this->redis->eval($script, $args, $numKeys);
     }
 
+    /**
+     * This method will never throw exception, only return false when can't connect with server
+     * @return bool|string
+     */
     public function ping()
     {
         try {
@@ -60,5 +66,10 @@ class PHPRedis implements Driver
     public function getPrefixOptionName()
     {
         return Redis::OPT_PREFIX;
+    }
+
+    public function getInstance()
+    {
+        return $this->redis;
     }
 }

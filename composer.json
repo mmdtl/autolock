@@ -1,6 +1,13 @@
 {
   "name": "mmdtl/autolock",
+  "type": "library",
+  "keywords": [
+    "lock",
+    "redis",
+    "RedLock"
+  ],
   "description": "Redis distributed locks in PHP",
+  "license": "MIT",
   "authors": [
     {
       "name": "liulu",
