@@ -20,14 +20,30 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * @depends testConstruct
+     * @dataProvider resolveDsnProvider
      * @param Config $config
      */
-    public function testResolveDsn(Config $config)
+    public function testResolveDsn($config, $ip, $port, $timeout)
     {
-        $this->assertEquals('192.168.1.2', $config->getHost());
-        $this->assertEquals((int)'6479', $config->getPort());
-        $this->assertEquals((float)'10', $config->getTimeout());
+        $configObject = new Config($config);
+        $this->assertEquals($ip, $configObject->getHost());
+        $this->assertEquals($port, $configObject->getPort());
+        $this->assertEquals($timeout, $configObject->getTimeout());
+    }
+
+    public function resolveDsnProvider()
+    {
+        return array(
+            array('192.168.1.2:6479@10', '192.168.1.2', 6479, 10),
+            array('192.168.1.2:6479', '192.168.1.2', 6479, 5),
+            array('192.168.1.2', '192.168.1.2', 6379, 5),
+            array(array('192.168.1.2', 6479, 10), '192.168.1.2', 6479, 10),
+            array(array('192.168.1.2', 6479), '192.168.1.2', 6479, 5),
+            array(array('192.168.1.2'), '192.168.1.2', 6379, 5),
+            array(array(), '127.0.0.1', 6379, 5),
+            array('', '127.0.0.1', 6379, 5),
+            array(null, '127.0.0.1', 6379, 5),
+        );
     }
 
     /**

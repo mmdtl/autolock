@@ -44,12 +44,30 @@ class Config
 
     protected function resolveDsn()
     {
-        $dsn = $this->dsn;
-        list($hostAndPort, $timeout) = explode('@', $dsn);
-        list($host, $port) = explode(':', $hostAndPort);
-        $this->host = (string)$host;
-        $this->port = (int)$port;
-        $this->timeout = (float)$timeout;
+        if (is_array($this->dsn)) {
+            $dsn = $this->dsn;
+            $this->host = empty($dsn[0]) ? $this->host : (string)$dsn[0];
+            $this->port = empty($dsn[1]) ? $this->port : (int)$dsn[1];
+            $this->timeout = empty($dsn[2]) ? $this->timeout : (float)$dsn[2];
+        } else {
+            $dsnArray = explode('@', $this->dsn);
+            if (count($dsnArray) >= 1) {
+                if (count($dsnArray) >= 2) {
+                    list($hostAndPort, $timeout) = $dsnArray;
+                } else {
+                    $hostAndPort = $dsnArray[0];
+                }
+                $hostAndPortArray = explode(':', $hostAndPort);
+                if (count($hostAndPortArray) >= 2) {
+                    list($host, $port) = $hostAndPortArray;
+                } else {
+                    $host = $hostAndPortArray[0];
+                }
+            }
+            $this->host = empty($host) ? $this->host : (string)$host;
+            $this->port = empty($port) ? $this->port : (int)$port;
+            $this->timeout = empty($timeout) ? $this->timeout : (float)$timeout;
+        }
     }
 
     /**
