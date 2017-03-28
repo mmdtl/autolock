@@ -12,6 +12,7 @@ before_install: echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv versi
 
 before_script:
   - composer install --dev
+  - composer dump-autoload
 
 script: vendor/bin/phpunit -v --configuration phpunit.xml.dist
 
