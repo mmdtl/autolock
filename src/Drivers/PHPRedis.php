@@ -38,6 +38,14 @@ class PHPRedis implements Driver
         return $this->redis->set($key, $value, $options);
     }
 
+    /**
+     * phpunit can't mock function whose name is keyword,so this
+     * function have no unit test.You should modify carefully.
+     * @param $script
+     * @param array $args
+     * @param int $numKeys
+     * @return mixed
+     */
     public function evalScript($script, $args = array(), $numKeys = 0)
     {
         return $this->redis->eval($script, $args, $numKeys);
