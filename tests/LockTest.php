@@ -1,5 +1,5 @@
 <?php
-namespace AutoLock\tests;
+namespace AutoLock\Test;
 
 
 use AutoLock\Drivers\Driver;

@@ -10,7 +10,7 @@ namespace AutoLock\Drivers;
  * file that was distributed with this source code.
  */
 use \Redis;
-use RedisException;
+use \RedisException;
 
 class PHPRedis implements Driver
 {
