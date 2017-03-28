@@ -4,7 +4,6 @@ namespace AutoLock\tests;
 use AutoLock\Config;
 use AutoLock\Drivers\Driver;
 use AutoLock\Server;
-use PHPUnit\Framework\Error\Error;
 use PHPUnit\Framework\TestCase;
 use AutoLock\Drivers\PHPRedis;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -60,13 +59,6 @@ class ServerTest extends TestCase
         $this->assertInstanceOf(Server::class, $server);
     }
 
-    /**
-     * @expectedException Error
-     */
-    public function testConstructConfigError()
-    {
-        new Server(new stdClass(), $this->driver->reveal());
-    }
 
     public function testGet()
     {
@@ -77,13 +69,6 @@ class ServerTest extends TestCase
         $this->assertEquals($driver, $server->getDriver());
     }
 
-    /**
-     * @expectedException Error
-     */
-    public function testConstructDriverError()
-    {
-        new Server($this->config->reveal(), new stdClass());
-    }
 
     public function testGetInstance()
     {
