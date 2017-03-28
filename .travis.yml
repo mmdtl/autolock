@@ -13,7 +13,7 @@ before_install: echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv versi
 before_script:
   - composer install --dev
 
-script: phpunit -v --configuration phpunit.xml.dist
+script: vendor/bin/phpunit -v --configuration phpunit.xml.dist
 
 matrix:
   allow_failures:
