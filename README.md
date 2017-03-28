@@ -1,4 +1,4 @@
-AutoLock[![Build Status](https://travis-ci.org/mmdtl/autolock.svg?branch=master)](https://travis-ci.org/mmdtl/autolock)
+AutoLock[![Build Status](https://travis-ci.org/mmdtl/autolock.svg?branch=master)](https://travis-ci.org/mmdtl/autolock)[![Code Coverage](https://scrutinizer-ci.com/g/mmdtl/autolock/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/mmdtl/autolock/?branch=master)
 ======
 
 
