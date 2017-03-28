@@ -39,7 +39,8 @@ interface Driver
     public function evalScript($script, $args = array(), $numKeys = 0);
 
     /**
-     * @return bool
+     * this function will return false or +PONG
+     * @return mixed
      * @throws \RedisException
      */
     public function ping();
