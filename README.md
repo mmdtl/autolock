@@ -1,3 +1,7 @@
+AutoLock[![Build Status](https://travis-ci.org/mmdtl/autolock.svg?branch=master)](https://travis-ci.org/mmdtl/autolock)
+======
+
+
 AutoLock - Redis distributed locks in PHP
 
 This library implements the RedLock algorithm introduced by [@antirez](http://antirez.com/)
