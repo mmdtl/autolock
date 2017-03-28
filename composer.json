@@ -21,7 +21,7 @@
   "autoload": {
     "psr-4": {
       "AutoLock\\": "src/",
-      "AutoLock\\Drivers": "src/Drivers"
+      "AutoLock\\Drivers\\": "src/Drivers/"
     }
   },
   "autoload-dev": {
