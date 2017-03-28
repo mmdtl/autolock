@@ -4,7 +4,6 @@ namespace AutoLock\Test;
 
 use AutoLock\Drivers\Driver;
 use AutoLock\Lock;
-use AutoLock\Manager;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;

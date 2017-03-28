@@ -3,12 +3,9 @@ namespace AutoLock\Test;
 
 
 use AutoLock\Manager;
-use AutoLock\Pool;
-use AutoLock\Server;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophet;
-use AutoLock\Lock;
 
 class ManagerTest extends TestCase
 {

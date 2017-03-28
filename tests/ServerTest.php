@@ -1,7 +1,6 @@
 <?php
 namespace AutoLock\Test;
 
-use AutoLock\Config;
 use AutoLock\Drivers\Driver;
 use AutoLock\Server;
 use PHPUnit\Framework\TestCase;
@@ -9,7 +8,6 @@ use AutoLock\Drivers\PHPRedis;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
 use RedisException;
-use stdClass;
 
 class ServerTest extends TestCase
 {
