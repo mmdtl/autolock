@@ -26,7 +26,6 @@ class PHPRedis implements Driver
         } else {
             $this->redis = $redis;
         }
-        return $this->redis;
     }
 
     public function connect($host, $port, $timeout)
@@ -46,7 +45,8 @@ class PHPRedis implements Driver
 
     /**
      * This method will never throw exception, only return false when can't connect with server
-     * @return bool|string
+     * this function will return false or +PONG
+     * @return mixed
      */
     public function ping()
     {

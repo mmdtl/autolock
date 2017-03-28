@@ -18,7 +18,7 @@ interface Driver
      * @param string $host
      * @param int $port
      * @param float $timeout
-     * @return $this
+     * @return bool
      */
     public function connect($host, $port, $timeout);
 

@@ -43,7 +43,7 @@ class Manager
     private $pool;
 
 
-    function __construct(Pool $pool, $retryDelay = 200, $retryCount = 3)
+    public function __construct(Pool $pool, $retryDelay = 200, $retryCount = 3)
     {
         $this->pool = $pool;
         $this->retryDelay = $retryDelay;
