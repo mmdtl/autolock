@@ -25,6 +25,7 @@
   },
   "autoload-dev": {
     "psr-4": {
+      "AutoLock\\": "src/",
       "AutoLock\\Test\\": "tests/"
     }
   },
