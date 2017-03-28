@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace autolock\Drivers;
+namespace AutoLock\Drivers;
 
 
 interface Driver

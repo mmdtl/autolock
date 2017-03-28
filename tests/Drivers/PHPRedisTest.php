@@ -2,7 +2,7 @@
 namespace AutoLock\tests\Drivers;
 
 
-use autolock\Drivers\Driver;
+use AutoLock\Drivers\Driver;
 use AutoLock\Drivers\PHPRedis;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;

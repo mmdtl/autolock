@@ -2,7 +2,7 @@
 namespace AutoLock\tests;
 
 
-use autolock\Drivers\Driver;
+use AutoLock\Drivers\Driver;
 use AutoLock\Lock;
 use AutoLock\Manager;
 use PHPUnit\Framework\TestCase;
