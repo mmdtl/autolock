@@ -31,10 +31,10 @@ class ManagerTest extends TestCase
 
     protected function getPoolForAvailable($totalServer, $onLineServersNumber)
     {
-        $pool = $this->prophet->prophesize(Pool::class);
+        $pool = $this->prophet->prophesize('\AutoLock\Pool');
         $servers = array();
         for ($i = 0; $i < $totalServer; $i++) {
-            $server = $this->prophet->prophesize(Server::class);
+            $server = $this->prophet->prophesize('\AutoLock\Server');
             if ($i < $onLineServersNumber) {
                 $server->available()->willReturn(true);
             } else {
@@ -75,14 +75,14 @@ class ManagerTest extends TestCase
 
     protected function getServerForUnlock($resource, $ttl)
     {
-        $server = $this->prophet->prophesize(Server::class);
+        $server = $this->prophet->prophesize('\AutoLock\Server');
         $this->mockServerEvalScriptFunc($server, $resource, $ttl);
         return $server->reveal();
     }
 
     protected function getServerForLock($resource, $ttl)
     {
-        $server = $this->prophet->prophesize(Server::class);
+        $server = $this->prophet->prophesize('\AutoLock\Server');
         $this->mockServerSetFunc($server, $resource, $ttl);
         if ($ttl <= Manager::MIN_DRIFT) {
             $this->mockServerEvalScriptFunc($server, $resource, $ttl);
@@ -128,7 +128,7 @@ class ManagerTest extends TestCase
      */
     public function testLock($resource, $ttl, $autoRelease)
     {
-        $pool = $this->prophet->prophesize(Pool::class);
+        $pool = $this->prophet->prophesize('\AutoLock\Pool');
         $totalServer = 3;
         for ($i = 0; $i < $totalServer; $i++) {
             $servers[] = $this->getServerForLock($resource, $ttl);
@@ -140,7 +140,7 @@ class ManagerTest extends TestCase
         $manager = new Manager($pool->reveal());
         $lock = $manager->lock($resource, $ttl, $autoRelease);
         if ($ttl > Manager::MIN_DRIFT) {
-            $this->assertInstanceOf(Lock::class, $lock);
+            $this->assertInstanceOf('\AutoLock\Lock', $lock);
             $this->assertEquals($resource, $lock->getResource());
             $this->assertEquals($manager, $lock->getManager());
             $this->assertInternalType('string', $lock->getToken());
@@ -172,11 +172,11 @@ class ManagerTest extends TestCase
      */
     public function testUnlock($resource, $ttl, $autoRelease)
     {
-        $lock = $this->prophet->prophesize(Lock::class);
+        $lock = $this->prophet->prophesize('\AutoLock\Lock');
         $lock->getResource()->willReturn($resource)->shouldBeCalledTimes(1);
         $lock->getToken()->willReturn('wwefdsff')->shouldBeCalledTimes(1);
 
-        $pool = $this->prophet->prophesize(Pool::class);
+        $pool = $this->prophet->prophesize('\AutoLock\Pool');
         $totalServer = 3;
         for ($i = 0; $i < $totalServer; $i++) {
             $servers[] = $this->getServerForUnlock($resource, $ttl);
@@ -206,8 +206,8 @@ class ManagerTest extends TestCase
      */
     public function testUnlockError()
     {
-        $lock = $this->prophet->prophesize(Lock::class);
-        $pool = $this->prophet->prophesize(Pool::class);
+        $lock = $this->prophet->prophesize('\AutoLock\Lock');
+        $pool = $this->prophet->prophesize('\AutoLock\Pool');
         $manager = new Manager($pool->reveal());
         $lock->getManager()->willReturn(new Manager($pool->reveal()))->shouldBeCalledTimes(1);
         $manager->unlock($lock->reveal());

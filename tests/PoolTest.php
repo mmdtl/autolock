@@ -42,7 +42,7 @@ class PoolTest extends TestCase
             '127.0.0.1:6379@1',
         );
 
-        $driver = $this->prophet->prophesize(PHPRedis::class);
+        $driver = $this->prophet->prophesize('\AutoLock\Drivers\PHPRedis');
         $truePHPRedis = new PHPRedis();
         foreach ($this->serversConfig as $configString) {
             $configObject = new Config($configString);
@@ -61,9 +61,9 @@ class PoolTest extends TestCase
     public function testConstruct()
     {
         $pool = new Pool($this->serversConfig, $this->driverObject);
-        $this->assertInstanceOf(Pool::class, $pool);
+        $this->assertInstanceOf('AutoLock\Pool', $pool);
         $pool = new Pool($this->serverConfig, $this->driverObject);
-        $this->assertInstanceOf(Pool::class, $pool);
+        $this->assertInstanceOf('AutoLock\Pool', $pool);
     }
 
     /**

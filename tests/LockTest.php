@@ -29,7 +29,7 @@ class LockTest extends TestCase
     protected function setUp()
     {
         $this->prophet = new Prophet;
-        $this->manager = $this->prophet->prophesize(Manager::class);
+        $this->manager = $this->prophet->prophesize('\AutoLock\Manager');
     }
 
     protected function tearDown()
@@ -40,14 +40,14 @@ class LockTest extends TestCase
     public function testConstruct()
     {
         $lock = new Lock($this->manager->reveal(), '', '', '');
-        $this->assertInstanceOf(Lock::class, $lock);
+        $this->assertInstanceOf('\AutoLock\Lock', $lock);
     }
 
     public function testRelease()
     {
         $lock = new Lock($this->manager->reveal(), '', '', '');
         $this->manager->unlock($lock)->willReturn(true)->shouldBeCalledTimes(1);
-        $this->assertInstanceOf(Lock::class, $lock);
+        $this->assertInstanceOf('\AutoLock\Lock', $lock);
         $this->assertEquals(true, $lock->release());
 
         $this->manager->unlock($lock)->willReturn(false)->shouldBeCalledTimes(2);
@@ -61,7 +61,7 @@ class LockTest extends TestCase
     public function testGetValidityResourceAndToken($validity, $resource, $token, $validityResult, $resourceResult, $tokenResult, $autoRelease)
     {
         $lock = new Lock($this->manager->reveal(), $validity, $resource, $token, $autoRelease);
-        $this->assertInstanceOf(Lock::class, $lock);
+        $this->assertInstanceOf('\AutoLock\Lock', $lock);
         $this->assertEquals($validityResult, $lock->getValidity());
         $this->assertEquals($resourceResult, $lock->getResource());
         $this->assertEquals($tokenResult, $lock->getToken());
@@ -81,7 +81,7 @@ class LockTest extends TestCase
     public function testGetManager()
     {
         $lock = new Lock($this->manager->reveal(), '', '', '');
-        $this->assertInstanceOf(Lock::class, $lock);
+        $this->assertInstanceOf('\AutoLock\Lock', $lock);
         $this->assertEquals($this->manager->reveal(), $lock->getManager());
     }
 
@@ -91,7 +91,7 @@ class LockTest extends TestCase
     public function testIsExpired($validity, $afterTime, $result)
     {
         $lock = new Lock($this->manager->reveal(), $validity, '', '');
-        $this->assertInstanceOf(Lock::class, $lock);
+        $this->assertInstanceOf('\AutoLock\Lock', $lock);
         $this->assertEquals($result, $lock->isExpired($afterTime));
     }
 
@@ -110,7 +110,7 @@ class LockTest extends TestCase
     {
         $lock = new Lock($this->manager->reveal(), '', '', '', true);
         $this->manager->unlock($lock)->willReturn(true)->shouldBeCalledTimes(1);
-        $this->assertInstanceOf(Lock::class, $lock);
+        $this->assertInstanceOf('\AutoLock\Lock', $lock);
         $lock->__destruct();
     }
 }

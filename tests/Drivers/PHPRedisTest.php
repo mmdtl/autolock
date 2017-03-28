@@ -31,7 +31,7 @@ class PHPRedisTest extends TestCase
     protected function setUp()
     {
         $this->prophet = new Prophet;
-        $this->redis = $this->prophet->prophesize(Redis::class);
+        $this->redis = $this->prophet->prophesize('\Redis');
     }
 
     protected function tearDown()
@@ -42,10 +42,10 @@ class PHPRedisTest extends TestCase
     public function testConstruct()
     {
         $driver = new PHPRedis($this->redis->reveal());
-        $this->assertInstanceOf(PHPRedis::class, $driver);
-        $this->assertInstanceOf(Redis::class, $driver->getInstance());
+        $this->assertInstanceOf('\AutoLock\Drivers\PHPRedis', $driver);
+        $this->assertInstanceOf('\Redis', $driver->getInstance());
         $driver = new PHPRedis();
-        $this->assertInstanceOf(PHPRedis::class, $driver);
+        $this->assertInstanceOf('\AutoLock\Drivers\PHPRedis', $driver);
     }
 
     public function testConnect()

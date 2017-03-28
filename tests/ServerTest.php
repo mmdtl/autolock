@@ -32,7 +32,7 @@ class ServerTest extends TestCase
     {
         $this->prophet = new Prophet;
 
-        $config = $this->prophet->prophesize(Config::class);
+        $config = $this->prophet->prophesize('AutoLock\Config');
         $config->getHost()->willReturn('127.0.0.1');
         $config->getPort()->willReturn(6379);
         $config->getTimeout()->willReturn(1);
@@ -40,7 +40,7 @@ class ServerTest extends TestCase
         $this->config = $config;
 
         $configObject = $config->reveal();
-        $driver = $this->prophet->prophesize(PHPRedis::class);
+        $driver = $this->prophet->prophesize('\AutoLock\Drivers\PHPRedis');
         $truePHPRedis = new PHPRedis();
         $driver->connect($configObject->getHost(), $configObject->getPort(), $configObject->getTimeout())->willReturn(true);
         $driver->getPrefixOptionName()->willReturn($truePHPRedis->getPrefixOptionName());
@@ -56,7 +56,7 @@ class ServerTest extends TestCase
     public function testConstruct()
     {
         $server = new Server($this->config->reveal(), $this->driver->reveal());
-        $this->assertInstanceOf(Server::class, $server);
+        $this->assertInstanceOf('\AutoLock\Server', $server);
     }
 
 
@@ -72,27 +72,27 @@ class ServerTest extends TestCase
 
     public function testGetInstance()
     {
-        $config = $this->prophet->prophesize(Config::class);
+        $config = $this->prophet->prophesize('\AutoLock\Config');
         $config->getHost()->willReturn('127.0.0.1')->shouldBeCalled();
         $config->getPort()->willReturn(6379)->shouldBeCalled();
         $config->getTimeout()->willReturn(1)->shouldBeCalled();
         $config->getPrefix()->willReturn('lock:')->shouldBeCalled();
         $configObject = $config->reveal();
 
-        $driver = $this->prophet->prophesize(PHPRedis::class);
+        $driver = $this->prophet->prophesize('\AutoLock\Drivers\PHPRedis');
         $truePHPRedis = new PHPRedis();
         $driver->connect($configObject->getHost(), $configObject->getPort(), $configObject->getTimeout())->willReturn(true)->shouldBeCalledTimes(1);
         $driver->getPrefixOptionName()->willReturn($truePHPRedis->getPrefixOptionName())->shouldBeCalledTimes(1);
         $driver->setOption($truePHPRedis->getPrefixOptionName(), $configObject->getPrefix())->willReturn(true)->shouldBeCalledTimes(1);
 
         $server = new Server($configObject, $driver->reveal());
-        $this->assertInstanceOf(Server::class, $server);
+        $this->assertInstanceOf('\AutoLock\Server', $server);
         $instance = $server->getInstance();
-        $this->assertInstanceOf(Driver::class, $instance);
+        $this->assertInstanceOf('\AutoLock\Drivers\Driver', $instance);
         $this->prophet->checkPredictions();
 
         $instance = $server->getInstance();
-        $this->assertInstanceOf(Driver::class, $instance);
+        $this->assertInstanceOf('\AutoLock\Drivers\Driver', $instance);
         $this->prophet->checkPredictions();
     }
 
@@ -102,7 +102,7 @@ class ServerTest extends TestCase
     public function testGetInstanceConnectError()
     {
         $configObject = $this->config->reveal();
-        $driver = $this->prophet->prophesize(PHPRedis::class);
+        $driver = $this->prophet->prophesize('\AutoLock\Drivers\PHPRedis');
         $truePHPRedis = new PHPRedis();
         $driver->connect($configObject->getHost(), $configObject->getPort(), $configObject->getTimeout())->willReturn(false);
         $driver->getPrefixOptionName()->willReturn($truePHPRedis->getPrefixOptionName());
@@ -118,7 +118,7 @@ class ServerTest extends TestCase
     public function testGetInstanceOperateError()
     {
         $configObject = $this->config->reveal();
-        $driver = $this->prophet->prophesize(PHPRedis::class);
+        $driver = $this->prophet->prophesize('\AutoLock\Drivers\PHPRedis');
         $truePHPRedis = new PHPRedis();
         $driver->connect($configObject->getHost(), $configObject->getPort(), $configObject->getTimeout())->willReturn(true);
         $driver->getPrefixOptionName()->willReturn($truePHPRedis->getPrefixOptionName());
@@ -136,7 +136,7 @@ class ServerTest extends TestCase
         $driver = $this->driver;
         $driver->set($key, $value, $option)->willReturn($result)->shouldBeCalledTimes(1);
         $server = new Server($this->config->reveal(), $driver->reveal());
-        $this->assertInstanceOf(Server::class, $server);
+        $this->assertInstanceOf('\AutoLock\Server', $server);
         $this->assertEquals($result, $server->set($key, $value, $option));
         $this->prophet->checkPredictions();
     }
@@ -159,7 +159,7 @@ class ServerTest extends TestCase
         $driver = $this->driver;
         $driver->evalScript($script, $args, $numKeys)->willReturn($result)->shouldBeCalledTimes(1);;
         $server = new Server($this->config->reveal(), $driver->reveal());
-        $this->assertInstanceOf(Server::class, $server);
+        $this->assertInstanceOf('\AutoLock\Server', $server);
         $this->assertEquals($result, $server->evalScript($script, $args, $numKeys));
         $this->prophet->checkPredictions();
     }
@@ -182,7 +182,7 @@ class ServerTest extends TestCase
         $driver = $this->driver;
         $driver->ping()->willReturn($response);
         $server = new Server($this->config->reveal(), $driver->reveal());
-        $this->assertInstanceOf(Server::class, $server);
+        $this->assertInstanceOf('\AutoLock\Server', $server);
         $this->assertEquals($result, $server->available());
     }
 
@@ -202,7 +202,7 @@ class ServerTest extends TestCase
         $driver = $this->driver;
         $driver->ping()->willThrow(new  RedisException());
         $server = new Server($this->config->reveal(), $driver->reveal());
-        $this->assertInstanceOf(Server::class, $server);
+        $this->assertInstanceOf('\AutoLock\Server', $server);
         $this->assertEquals(false, $server->available());
     }
 }
